@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { InsuredApiService } from 'src/app/insured-api.service';
 import { Observable } from 'rxjs';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-edit-insured',
@@ -8,41 +9,36 @@ import { Observable } from 'rxjs';
   styleUrls: ['./add-edit-insured.component.css']
 })
 export class AddEditInsuredComponent implements OnInit {
-  
-  insuredList$!: Observable<any[]>;  
-  
+
+  insuredList$!: Observable<any[]>;
+
+  insuredForm!: FormGroup;
 
   constructor(private service:InsuredApiService) { }
 
   @Input() insured:any;
-  Id:number=0;
-  firstName:string="";
-  lastName:string="";
-  effectiveDate:string="";
-  street:string="";
-  city:string="";
-  zipCode:string="";
-  state:string="";
-  insuredValueAmount!:number;
 
-   activateAddInsured:boolean=false;
+  activateAddInsured:boolean=false;
   activateUpdateInsured:boolean=false;
 
-  
+
   /* statesList:any[]*/
 
 
   ngOnInit(): void {
     // this.loadInsured();
-    this.Id = this.insured.Id;
-    this.firstName = this.insured.firstName;
-    this.lastName = this.insured.lastName;
-    this.effectiveDate = this.insured.effectiveDate;
-    this.street = this.insured.street;
-    this.city = this.insured.city;
-    this.zipCode = this.insured.zipCode;
-    this.state = this.insured.state;
-    this.insuredValueAmount = this.insured.insuredValueAmount;
+    this.insuredForm = new FormGroup({
+      firstName:  new FormControl(this.insured?.firstName),
+      lastName: new FormControl(this.insured?.lastName ?? ''),
+      effectiveDate:  new FormControl(this.insured?.effectiveDate ?? ''),
+      street: new FormControl(this.insured?.address?.street ?? ''),
+      city: new FormControl(this.insured?.address?.city ?? ''),
+      zipCode: new FormControl(this.insured?.address?.zipCode ?? ''),
+      state: new FormControl(this.insured?.address?.state ?? ''),
+      insuredValueAmount: new FormControl(this.insured?.rate?.insuredValueAmount ?? '')
+    })
+    //this.Id = this.insured.Id;
+
     this.insuredList$ = this.service.getInsuredList();
   }
 
@@ -51,22 +47,12 @@ export class AddEditInsuredComponent implements OnInit {
   //     this.statesList=data;
   //   })) */
 
-   
+
   // }
 
-  addInsured(){
-    // create data 
-    var insured ={
-      Id: this.Id,
-      firstName:this.firstName,
-      lastName: this.lastName,
-      effectiveDate:this.effectiveDate,
-      street: this.street,
-      city:this.city,
-      zipCode:this.zipCode,
-      state: this.state,
-      insuredValueAmount:this.insuredValueAmount
-    };
+  addInsured() {
+    // create data
+    const insured = this.loadDataFromForm();
 
     this.service.addInsured(insured).subscribe(rest=>{
       var closeModalBtn = document.getElementById('add-edit-modal-close');
@@ -86,20 +72,28 @@ export class AddEditInsuredComponent implements OnInit {
   }
 
   updateInsured(){
-    var data ={
-      Id:this.insured.Id,
-      firstName:this.insured.firstName,
-      lastName: this.insured.lastName,
-      effectiveDate:this.insured.effectiveDate,
-      street: this.insured.street,
-      city:this.insured.city,
-      zipCode:this.insured.zipCode,
-      state: this.insured.state,
-      insuredValueAmount:this.insured.insuredValueAmount
-    };
-    this.service.updateInsured(this.Id, data).subscribe(rest=>{
+    const insured = this.loadDataFromForm();
+
+    this.service.updateInsured(insured).subscribe(rest=>{
       alert(rest.toString());
     });
+  }
+
+  private loadDataFromForm() {
+    const data = this.insuredForm.value;
+    var insured = {
+      id: this.insured?.id,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      effectiveDate: data.effectiveDate,
+      street: data.street,
+      city: data.city,
+      zipCode: data.zipCode,
+      state: data.state,
+      insuredValueAmount: data.insuredValueAmount
+    };
+
+    return insured;
   }
 
 }
