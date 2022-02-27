@@ -8,22 +8,22 @@ import { InsuredApiService } from 'src/app/insured-api.service';
   styleUrls: ['./show-insured.component.css']
 })
 export class ShowInsuredComponent implements OnInit {
-  
-  insuredList$!: Observable<any[]>;  
-  
+
+  insuredList$!: Observable<any[]>;
+
   constructor(private service:InsuredApiService) { }
-  
+
   ngOnInit(): void {
     this.insuredList$ = this.service.getInsuredList();
-  };       
-  
+  };
+
   modalTitle:string = "";
   insured:any;
   ActivateAddEditInsuredComp:boolean= false;
 
-  modalAdd(){ 
+  modalAdd(){
     this.insured={
-      Id:0,
+      id: 0,
       firstName:null,
       lastName:null,
       effectiveDate:null,
@@ -31,7 +31,8 @@ export class ShowInsuredComponent implements OnInit {
       city:null,
       state:null,
       zipCode:null,
-      insuredValueAmount:null
+      insuredValueAmount:null,
+      isNew: true
     }
     this.modalTitle = "Add Insured";
     this.ActivateAddEditInsuredComp=true;
@@ -39,7 +40,7 @@ export class ShowInsuredComponent implements OnInit {
 
   modalClose(){
     this.ActivateAddEditInsuredComp=false;
-    this.insuredList$= this.service.getInsuredList();
+    this.insuredList$ = this.service.getInsuredList();
   }
 
 }
