@@ -26,7 +26,6 @@ export class AddEditInsuredComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.loadInsured();
     this.insuredForm = new FormGroup({
       firstName:  new FormControl(this.insured?.firstName),
       lastName: new FormControl(this.insured?.lastName ?? ''),
@@ -37,18 +36,9 @@ export class AddEditInsuredComponent implements OnInit {
       state: new FormControl(this.insured?.address?.state ?? ''),
       insuredValueAmount: new FormControl(this.insured?.rate?.insuredValueAmount ?? '')
     })
-    //this.Id = this.insured.Id;
 
     this.insuredList$ = this.service.getInsuredList();
   }
-
-  // loadInsured(){
-  //   /*this.service.GetAllStates().suscribe((data:any)=>{
-  //     this.statesList=data;
-  //   })) */
-
-
-  // }
 
   addInsured() {
     // create data
@@ -74,8 +64,21 @@ export class AddEditInsuredComponent implements OnInit {
   updateInsured(){
     const insured = this.loadDataFromForm();
 
-    this.service.updateInsured(insured).subscribe(rest=>{
-      alert(rest.toString());
+    var id:number = insured.id;
+    this.service.updateInsured(id, insured).subscribe(rest=>{
+      var closeModalBtn = document.getElementById('add-edit-modal-close');
+      if (closeModalBtn) {
+        closeModalBtn.click();
+      }
+      var showUpdateSuccess = document.getElementById('update-success-alert');
+      if (showUpdateSuccess) {
+        showUpdateSuccess.style.display = "block";
+      }
+      setTimeout(function(){
+        if(showUpdateSuccess){
+          showUpdateSuccess.style.display = "none";
+        }
+      },4000);
     });
   }
 

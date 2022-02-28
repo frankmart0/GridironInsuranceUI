@@ -29,8 +29,12 @@ export class InsuredApiService {
           );
   }
 
-  updateInsured(data:any){
-    return this.http.put(this.insuredAPIUrl + `/insureds/${data.id}`, data);
+  updateInsured(id:number, data:any){
+    return this.http.put(this.insuredAPIUrl + `/insureds/${data.id}`, JSON.stringify(data), this.httpOptions )
+          .pipe(
+            map(res => res),
+            catchError(err => { return this.errorHandler(err) })
+          );
   }
 
   deleteInsured(id:number|string){
