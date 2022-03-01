@@ -21,10 +21,6 @@ export class AddEditInsuredComponent implements OnInit {
   activateAddInsured:boolean=false;
   activateUpdateInsured:boolean=false;
 
-
-  /* statesList:any[]*/
-
-
   ngOnInit(): void {
     this.insuredForm = new FormGroup({
       firstName:  new FormControl(this.insured?.firstName),
@@ -34,14 +30,13 @@ export class AddEditInsuredComponent implements OnInit {
       city: new FormControl(this.insured?.address?.city ?? ''),
       zipCode: new FormControl(this.insured?.address?.zipCode ?? ''),
       state: new FormControl(this.insured?.address?.state ?? ''),
-      insuredValueAmount: new FormControl(this.insured?.rate?.insuredValueAmount ?? '')
+      
     })
 
     this.insuredList$ = this.service.getInsuredList();
   }
 
   addInsured() {
-    // create data
     const insured = this.loadDataFromForm();
 
     this.service.addInsured(insured).subscribe(rest=>{
@@ -84,6 +79,7 @@ export class AddEditInsuredComponent implements OnInit {
 
   private loadDataFromForm() {
     const data = this.insuredForm.value;
+    
     var insured = {
       id: this.insured?.id,
       firstName: data.firstName,
@@ -93,7 +89,6 @@ export class AddEditInsuredComponent implements OnInit {
       city: data.city,
       zipCode: data.zipCode,
       state: data.state,
-      insuredValueAmount: data.insuredValueAmount
     };
 
     return insured;

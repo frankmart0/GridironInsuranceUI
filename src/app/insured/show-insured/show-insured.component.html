@@ -1,5 +1,5 @@
 <!-- Add insured trigger modal -->
-<button type="button" class="btn btn-primary float-start mt-2" data-bs-toggle="modal" 
+<button type="button" class="btn btn-primary float-end m-2" data-bs-toggle="modal" 
 data-bs-target="#staticBackdrop"
 (click)="modalAdd()">
 Add Insured
@@ -30,7 +30,7 @@ Add Insured
             <td>{{ins.city}}</td>
             <td>{{ins.state}}</td>
             <td>{{ins.zipCode}}</td>
-            <td>{{ins.insuredValueAmount}}</td>
+            <td>{{ins.rateValue}}</td>
             <td>
                 <button type="button" class="btn btn-outline-primary me-2 mb-1"
                 (click)="modalEdit(ins)" data-bs-toggle="modal" data-bs-target="#staticBackdrop"

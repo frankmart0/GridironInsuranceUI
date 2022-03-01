@@ -31,7 +31,6 @@ export class ShowInsuredComponent implements OnInit {
       city:null,
       state:null,
       zipCode:null,
-      insuredValueAmount:null,
       isNew: true
     }
     this.modalTitle = "Add Insured";
